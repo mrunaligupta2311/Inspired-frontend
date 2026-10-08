@@ -1,0 +1,1580 @@
+import { useEffect, useState } from "react";
+import { useNavigate } from "react-router-dom";
+import {
+  ArrowLeft,
+  CheckCircle2,
+  Edit3,
+  Eye,
+  EyeOff,
+  KeyRound,
+  LockKeyhole,
+  LogOut,
+  Mail,
+  RefreshCw,
+  Save,
+  ShieldCheck,
+  UserRound,
+  X,
+} from "lucide-react";
+
+import "./Administration.css";
+import apiClient from "../../api/client";
+
+const INITIAL_ADMIN = {
+  name: "",
+  email: "",
+};
+
+function Administration() {
+  const navigate = useNavigate();
+
+  /* =========================================================
+     ACCOUNT STATE
+     ========================================================= */
+
+  const [admin, setAdmin] = useState(INITIAL_ADMIN);
+  const [profileLoading, setProfileLoading] = useState(true);
+  const [profileSaving, setProfileSaving] = useState(false);
+  const [logoutLoading, setLogoutLoading] = useState(false);
+  const [showLogoutConfirm, setShowLogoutConfirm] = useState(false);
+
+  useEffect(() => {
+    let mounted = true;
+
+    const loadAdminProfile = async () => {
+      try {
+        setProfileLoading(true);
+
+        const response = await apiClient.get("/auth/me");
+        const currentAdmin = response.data?.admin;
+
+        if (mounted && currentAdmin) {
+          setAdmin({
+            name: currentAdmin.name || "",
+            email: currentAdmin.email || "",
+          });
+        }
+      } catch (error) {
+        console.error("Failed to load admin profile:", error);
+      } finally {
+        if (mounted) {
+          setProfileLoading(false);
+        }
+      }
+    };
+
+    loadAdminProfile();
+
+    return () => {
+      mounted = false;
+    };
+  }, []);
+
+  const [editMode, setEditMode] = useState(false);
+
+  const [accountMessage, setAccountMessage] = useState("");
+
+  /* =========================================================
+     EMAIL CHANGE VERIFICATION
+     ========================================================= */
+
+  const [emailVerificationOpen, setEmailVerificationOpen] =
+    useState(false);
+
+  const [emailVerificationPassword, setEmailVerificationPassword] =
+    useState("");
+
+  const [showEmailVerificationPassword, setShowEmailVerificationPassword] =
+    useState(false);
+
+  const [emailVerificationError, setEmailVerificationError] =
+    useState("");
+
+  const [pendingEmail, setPendingEmail] = useState("");
+
+  /* =========================================================
+     PASSWORD VISIBILITY
+     ========================================================= */
+
+  const [showCurrentPassword, setShowCurrentPassword] =
+    useState(false);
+
+  const [showNewPassword, setShowNewPassword] =
+    useState(false);
+
+  const [showConfirmPassword, setShowConfirmPassword] =
+    useState(false);
+
+  /* =========================================================
+     PASSWORD CHANGE STATE
+     ========================================================= */
+
+  const [passwordModalOpen, setPasswordModalOpen] =
+    useState(false);
+
+  const [passwordStep, setPasswordStep] =
+    useState("method");
+
+  const [verificationMethod, setVerificationMethod] =
+    useState("");
+
+  const [currentPassword, setCurrentPassword] =
+    useState("");
+
+  const [newPassword, setNewPassword] =
+    useState("");
+
+  const [confirmPassword, setConfirmPassword] =
+    useState("");
+
+  const [otp, setOtp] = useState("");
+
+  const [demoOtp, setDemoOtp] = useState("");
+
+  const [passwordError, setPasswordError] =
+    useState("");
+
+  const [passwordSuccess, setPasswordSuccess] =
+    useState("");
+
+  /* =========================================================
+     ACCOUNT EDIT
+     ========================================================= */
+
+  const handleLogout = async () => {
+    setShowLogoutConfirm(true);
+  };
+
+  const confirmLogout = async () => {
+    try {
+      setLogoutLoading(true);
+
+        await apiClient.post("/auth/logout");
+        localStorage.removeItem("inspired_admin_token");
+
+        setShowLogoutConfirm(false);
+
+        navigate("/login", { replace: true });
+    } catch (error) {
+      console.error("Admin logout failed:", error);
+    } finally {
+      setLogoutLoading(false);
+    }
+  };
+
+  const cancelLogout = () => {
+    if (!logoutLoading) {
+      setShowLogoutConfirm(false);
+    }
+  };
+
+  const handleAccountChange = (event) => {
+    const { name, value } = event.target;
+
+    setAdmin((current) => ({
+      ...current,
+      [name]: value,
+    }));
+  };
+
+  const handleSaveAccount = async (event) => {
+    event.preventDefault();
+
+    const name = admin.name.trim();
+
+    if (!name) {
+      setAccountError("Name is required.");
+      return;
+    }
+
+    try {
+      setProfileSaving(true);
+      setAccountError("");
+
+      const response = await apiClient.patch("/auth/profile", {
+        name,
+      });
+
+      const updatedAdmin = response.data?.admin;
+
+      if (updatedAdmin) {
+        setAdmin({
+          name: updatedAdmin.name || "",
+          email: updatedAdmin.email || "",
+        });
+      }
+
+      setAccountSuccess(
+        response.data?.message ||
+          "Profile updated successfully."
+      );
+    } catch (error) {
+      setAccountError(
+        error.message ||
+          "Unable to update your profile. Please try again."
+      );
+    } finally {
+      setProfileSaving(false);
+    }
+  };
+
+  const handleEdit = () => {
+    setEditMode(true);
+    setAccountMessage("");
+  };
+
+  const handleCancelEdit = () => {
+    setAdmin((previous) => ({
+      ...previous,
+      name: INITIAL_ADMIN.name,
+      email: INITIAL_ADMIN.email,
+    }));
+
+    setEditMode(false);
+    setAccountMessage("");
+
+    setEmailVerificationOpen(false);
+    setEmailVerificationPassword("");
+    setEmailVerificationError("");
+    setPendingEmail("");
+    setShowEmailVerificationPassword(false);
+  };
+
+  /* =========================================================
+     SAVE ACCOUNT CHANGES
+     ========================================================= */
+
+  const handleSaveChanges = (event) => {
+    event.preventDefault();
+
+    const emailChanged = admin.email !== INITIAL_ADMIN.email;
+
+    /*
+      Name can be saved directly.
+
+      Email change requires password verification
+      before it is saved.
+    */
+
+    if (emailChanged) {
+      setPendingEmail(admin.email);
+
+      setEmailVerificationPassword("");
+      setEmailVerificationError("");
+      setShowEmailVerificationPassword(false);
+
+      setEmailVerificationOpen(true);
+
+      return;
+    }
+
+    setAccountMessage(
+      "Account details saved successfully."
+    );
+
+    setEditMode(false);
+  };
+
+  /* =========================================================
+     EMAIL PASSWORD VERIFICATION
+     ========================================================= */
+const handleVerifyEmailChange = (event) => {
+  event.preventDefault();
+
+  setEmailVerificationError("");
+
+  if (!emailVerificationPassword) {
+    setEmailVerificationError(
+      "Please enter your password to save changes."
+    );
+
+    return;
+  }
+
+  if (emailVerificationPassword !== admin.password) {
+    setEmailVerificationError(
+      "Wrong password. Please try again."
+    );
+
+    return;
+  }
+
+  setAdmin((previous) => ({
+    ...previous,
+    email: pendingEmail,
+  }));
+
+  setEmailVerificationOpen(false);
+  setEmailVerificationPassword("");
+  setEmailVerificationError("");
+  setPendingEmail("");
+  setShowEmailVerificationPassword(false);
+
+  setAccountMessage(
+    "Account details saved successfully."
+  );
+  setEditMode(false);
+};
+  const closeEmailVerification = () => {
+    /*
+      Keep edit mode active when verification is cancelled.
+      Restore the previous email so an unverified change
+      is never accidentally kept.
+    */
+
+    setAdmin((previous) => ({
+      ...previous,
+      email: INITIAL_ADMIN.email,
+    }));
+
+    setEmailVerificationOpen(false);
+    setEmailVerificationPassword("");
+    setEmailVerificationError("");
+    setPendingEmail("");
+    setShowEmailVerificationPassword(false);
+  };
+
+  /* =========================================================
+     PASSWORD MODAL
+     ========================================================= */
+
+  const resetPasswordFlow = () => {
+    setPasswordStep("current-password");
+    setVerificationMethod("");
+    setCurrentPassword("");
+    setNewPassword("");
+    setConfirmPassword("");
+    setOtp("");
+    setDemoOtp("");
+    setPasswordError("");
+    setPasswordSuccess("");
+
+    setShowCurrentPassword(false);
+    setShowNewPassword(false);
+    setShowConfirmPassword(false);
+  };
+
+  const openPasswordModal = () => {
+    resetPasswordFlow();
+    setPasswordModalOpen(true);
+  };
+
+  const closePasswordModal = () => {
+    setPasswordModalOpen(false);
+    resetPasswordFlow();
+  };
+
+  /* =========================================================
+     VERIFICATION METHOD
+     ========================================================= */
+
+  const handleVerificationMethod = (method) => {
+    setVerificationMethod(method);
+    setPasswordError("");
+    setPasswordSuccess("");
+
+    if (method === "otp") {
+      sendOtp();
+      return;
+    }
+
+    setPasswordStep("current-password");
+  };
+
+  /* =========================================================
+     DEMO OTP
+     ========================================================= */
+
+  const sendOtp = () => {
+    /*
+      FRONTEND DEMO ONLY
+
+      Later this will call the backend:
+
+      POST /admin/password/send-otp
+
+      The backend will generate the OTP and send it
+      to the registered administrator email.
+    */
+
+    const generatedOtp =
+      Math.floor(100000 + Math.random() * 900000).toString();
+
+    setDemoOtp(generatedOtp);
+    setOtp("");
+    setPasswordError("");
+    setPasswordSuccess("");
+    setPasswordStep("otp");
+
+    console.log("DEMO OTP:", generatedOtp);
+  };
+
+  const handleResendOtp = () => {
+    sendOtp();
+  };
+
+  /* =========================================================
+     PASSWORD VALIDATION
+     ========================================================= */
+
+  const validateNewPassword = () => {
+    if (newPassword.length < 4) {
+      setPasswordError(
+        "Password must be at least 4 characters long."
+      );
+
+      return false;
+    }
+
+    if (newPassword !== confirmPassword) {
+      setPasswordError(
+        "New password and confirm password do not match."
+      );
+
+      return false;
+    }
+
+    return true;
+  };
+
+  const updatePasswordSuccessfully = () => {
+    setAdmin((previous) => ({
+      ...previous,
+      password: newPassword,
+    }));
+
+    setPasswordError("");
+    setPasswordSuccess(
+      "Password updated successfully."
+    );
+
+    setPasswordStep("success");
+  };
+
+  /* =========================================================
+     OTP VERIFICATION
+     ========================================================= */
+
+  const handleVerifyOtp = (event) => {
+    event.preventDefault();
+
+    setPasswordError("");
+    setPasswordSuccess("");
+
+    if (!otp.trim()) {
+      setPasswordError("Please enter the OTP.");
+      return;
+    }
+
+    if (otp !== demoOtp) {
+      setPasswordError(
+        "Invalid OTP. Please try again."
+      );
+
+      return;
+    }
+
+    /*
+      OTP verified successfully.
+      Now move to the new password step.
+    */
+
+    setPasswordStep("new-password");
+  };
+
+  /* =========================================================
+     CURRENT PASSWORD VERIFICATION
+     ========================================================= */
+
+  const handleVerifyCurrentPassword = (event) => {
+    event.preventDefault();
+
+    setPasswordError("");
+    setPasswordSuccess("");
+
+    if (!currentPassword) {
+      setPasswordError(
+        "Please enter your current password."
+      );
+
+      return;
+    }
+
+    if (currentPassword !== admin.password) {
+      setPasswordError("Wrong current password.");
+      return;
+    }
+
+    /*
+      Current password verified successfully.
+      Now move to the new password step.
+    */
+
+    setPasswordStep("new-password");
+  };
+
+  /* =========================================================
+     FINAL NEW PASSWORD SUBMISSION
+     ========================================================= */
+
+  const handleUpdateNewPassword = (event) => {
+    event.preventDefault();
+
+    setPasswordError("");
+    setPasswordSuccess("");
+
+    if (!validateNewPassword()) {
+      return;
+    }
+
+    updatePasswordSuccessfully();
+  };
+
+  /* =========================================================
+     NEW PASSWORD FIELDS
+     ========================================================= */
+
+  const renderNewPasswordFields = () => (
+    <>
+      <div className="administration-field">
+        <label htmlFor="new-password">
+          New Password
+        </label>
+
+        <div className="administration-input-wrapper">
+          <KeyRound
+            size={18}
+            aria-hidden="true"
+          />
+
+          <input
+            id="new-password"
+            type={
+              showNewPassword
+                ? "text"
+                : "password"
+            }
+            value={newPassword}
+            onChange={(event) => {
+              setNewPassword(event.target.value);
+              setPasswordError("");
+            }}
+            placeholder="Enter new password"
+            autoComplete="new-password"
+          />
+
+          <button
+            type="button"
+            className="administration-password-toggle"
+            onClick={() =>
+              setShowNewPassword(
+                (previous) => !previous
+              )
+            }
+            aria-label={
+              showNewPassword
+                ? "Hide new password"
+                : "Show new password"
+            }
+          >
+            {showNewPassword ? (
+              <EyeOff size={18} />
+            ) : (
+              <Eye size={18} />
+            )}
+          </button>
+        </div>
+
+        <span className="administration-field-hint">
+          Minimum 4 characters. Letters, numbers, and
+          symbols are allowed.
+        </span>
+      </div>
+
+      <div className="administration-field">
+        <label htmlFor="confirm-password">
+          Confirm New Password
+        </label>
+
+        <div className="administration-input-wrapper">
+          <LockKeyhole
+            size={18}
+            aria-hidden="true"
+          />
+
+          <input
+            id="confirm-password"
+            type={
+              showConfirmPassword
+                ? "text"
+                : "password"
+            }
+            value={confirmPassword}
+            onChange={(event) => {
+              setConfirmPassword(
+                event.target.value
+              );
+
+              setPasswordError("");
+            }}
+            placeholder="Confirm new password"
+            autoComplete="new-password"
+          />
+
+          <button
+            type="button"
+            className="administration-password-toggle"
+            onClick={() =>
+              setShowConfirmPassword(
+                (previous) => !previous
+              )
+            }
+            aria-label={
+              showConfirmPassword
+                ? "Hide confirm password"
+                : "Show confirm password"
+            }
+          >
+            {showConfirmPassword ? (
+              <EyeOff size={18} />
+            ) : (
+              <Eye size={18} />
+            )}
+          </button>
+        </div>
+      </div>
+    </>
+  );
+
+  /* =========================================================
+     RENDER
+     ========================================================= */
+
+  return (
+    <>
+      <section className="administration-page">
+        {/* ===================================================
+            PAGE HEADER
+            =================================================== */}
+
+        <div className="administration-page-header">
+          <div>
+            <span className="administration-page-kicker">
+              ACCOUNT SETTINGS
+            </span>
+
+            <h1>Administration</h1>
+
+            <p>
+              Manage your administrator account details
+              and security settings.
+            </p>
+          </div>
+
+          {!editMode && (
+            <button
+              type="button"
+              className="administration-edit-button"
+              onClick={handleEdit}
+            >
+              <Edit3
+                size={17}
+                strokeWidth={2}
+              />
+
+              <span>Edit</span>
+            </button>
+          )}
+        </div>
+
+        {/* ===================================================
+            ACCOUNT CARD
+            =================================================== */}
+
+        <div className="administration-card">
+          <div className="administration-card-header">
+            <div className="administration-card-icon">
+              <ShieldCheck
+                size={21}
+                strokeWidth={2}
+              />
+            </div>
+
+            <div>
+              <h2>Account Details</h2>
+
+              <p>
+                Your administrator account information.
+              </p>
+            </div>
+          </div>
+
+          <form
+            className="administration-form"
+            onSubmit={handleSaveChanges}
+          >
+            {/* =================================================
+                ADMIN NAME
+                ================================================= */}
+
+            <div className="administration-field">
+              <label htmlFor="admin-name">
+                Admin Name
+              </label>
+
+              <div className="administration-input-wrapper">
+                <UserRound
+                  size={18}
+                  aria-hidden="true"
+                />
+
+                <input
+                  id="admin-name"
+                  type="text"
+                  name="name"
+                  value={admin.name}
+                  onChange={handleAccountChange}
+                  placeholder="Enter admin name"
+                  autoComplete="name"
+                  disabled={!editMode}
+                />
+              </div>
+            </div>
+
+            {/* =================================================
+                EMAIL
+                ================================================= */}
+
+            <div className="administration-field">
+              <label htmlFor="admin-email">
+                Email Address
+              </label>
+
+              <div className="administration-input-wrapper">
+                <Mail
+                  size={18}
+                  aria-hidden="true"
+                />
+
+                <input
+                  id="admin-email"
+                  type="email"
+                  name="email"
+                  value={admin.email}
+                  onChange={handleAccountChange}
+                  placeholder="Enter registered email"
+                  autoComplete="email"
+                  disabled={!editMode}
+                />
+              </div>
+
+              {editMode && (
+                <span className="administration-field-hint">
+                  Changing your email requires password
+                  verification.
+                </span>
+              )}
+            </div>
+
+            {/* =================================================
+                PASSWORD
+                ================================================= */}
+
+            <div className="administration-field">
+              <label>Password</label>
+
+              <div className="administration-password-row">
+                <div className="administration-input-wrapper">
+                  <LockKeyhole
+                    size={18}
+                    aria-hidden="true"
+                  />
+
+                  <input
+                    type="password"
+                    value="********"
+                    readOnly
+                    disabled
+                    aria-label="Password"
+                  />
+                </div>
+
+                {editMode && (
+                  <button
+                    type="button"
+                    className="administration-change-password-button"
+                    onClick={openPasswordModal}
+                  >
+                    <KeyRound
+                      size={16}
+                      strokeWidth={2}
+                    />
+
+                    <span>Change Password</span>
+                  </button>
+                )}
+              </div>
+
+              <span className="administration-field-hint">
+                Password changes require identity
+                verification.
+              </span>
+            </div>
+
+            {/* =================================================
+                ACCOUNT SUCCESS MESSAGE
+                ================================================= */}
+
+            {accountMessage && (
+              <div className="administration-success-message">
+                <CheckCircle2
+                  size={17}
+                  aria-hidden="true"
+                />
+
+                <span>{accountMessage}</span>
+              </div>
+            )}
+
+            {/* =================================================
+                EDIT ACTIONS
+                ================================================= */}
+
+            {editMode && (
+              <div className="administration-form-footer">
+                <button
+                  type="button"
+                  className="administration-cancel-button"
+                  onClick={handleCancelEdit}
+                >
+                  Cancel
+                </button>
+
+                <button
+                  type="submit"
+                  className="administration-save-button"
+                >
+                  <Save
+                    size={17}
+                    strokeWidth={2}
+                  />
+
+                  <span>Save Changes</span>
+                </button>
+              </div>
+            )}
+          </form>
+        </div>
+      </section>
+
+      <section className="administration-logout-section">
+        <button
+          type="button"
+          className="administration-logout-button"
+          onClick={handleLogout}
+          disabled={logoutLoading}
+        >
+          <LogOut size={17} strokeWidth={2} />
+          <span>
+            {logoutLoading ? "Logging out..." : "Logout"}
+          </span>
+        </button>
+      </section>
+
+      {/* =====================================================
+          LOGOUT CONFIRMATION MODAL
+          ===================================================== */}
+
+      {showLogoutConfirm && (
+        <div
+          className="administration-modal-backdrop"
+          role="presentation"
+          onMouseDown={(event) => {
+            if (
+              event.target === event.currentTarget &&
+              !logoutLoading
+            ) {
+              cancelLogout();
+            }
+          }}
+        >
+          <div
+            className="administration-modal administration-logout-modal"
+            role="dialog"
+            aria-modal="true"
+            aria-labelledby="logout-confirmation-title"
+          >
+            <div className="administration-modal-header">
+              <div>
+                <h3 id="logout-confirmation-title">
+                  Confirm Logout
+                </h3>
+
+                <p>
+                  Are you sure you want to logout from the admin panel?
+                </p>
+              </div>
+
+              <button
+                type="button"
+                className="administration-modal-close"
+                onClick={cancelLogout}
+                disabled={logoutLoading}
+                aria-label="Close logout confirmation"
+              >
+                <X size={18} strokeWidth={2} />
+              </button>
+            </div>
+
+            <div className="administration-logout-modal-body">
+              <div className="administration-logout-modal-icon">
+                <LogOut size={22} strokeWidth={2} />
+              </div>
+
+              <div>
+                <strong>Logout from this account?</strong>
+                <p>
+                  You will need to log in again to access the admin panel.
+                </p>
+              </div>
+            </div>
+
+            <div className="administration-modal-footer">
+              <button
+                type="button"
+                className="administration-cancel-button"
+                onClick={cancelLogout}
+                disabled={logoutLoading}
+              >
+                Cancel
+              </button>
+
+              <button
+                type="button"
+                className="administration-logout-confirm-button"
+                onClick={confirmLogout}
+                disabled={logoutLoading}
+              >
+                <LogOut size={17} strokeWidth={2} />
+
+                <span>
+                  {logoutLoading
+                    ? "Logging out..."
+                    : "Confirm Logout"}
+                </span>
+              </button>
+            </div>
+          </div>
+        </div>
+      )}
+
+      {/* =====================================================
+          EMAIL CHANGE VERIFICATION MODAL
+          ===================================================== */}
+
+      {emailVerificationOpen && (
+        <div
+          className="administration-modal-backdrop"
+          role="presentation"
+          onMouseDown={(event) => {
+            if (
+              event.target === event.currentTarget
+            ) {
+              closeEmailVerification();
+            }
+          }}
+        >
+          <div
+            className="administration-modal"
+            role="dialog"
+            aria-modal="true"
+            aria-labelledby="email-verification-title"
+          >
+            {/* =================================================
+                MODAL HEADER
+                ================================================= */}
+
+            <div className="administration-modal-header">
+              <div>
+                <span className="administration-modal-kicker">
+                  SECURITY
+                </span>
+
+                <h2 id="email-verification-title">
+                  Verify Password
+                </h2>
+              </div>
+
+              <button
+                type="button"
+                className="administration-modal-close"
+                onClick={closeEmailVerification}
+                aria-label="Close email verification"
+              >
+                <X size={20} />
+              </button>
+            </div>
+
+            <form
+              className="administration-password-step"
+              onSubmit={handleVerifyEmailChange}
+            >
+              <div className="administration-security-intro">
+                <div className="administration-security-icon">
+                  <ShieldCheck size={24} />
+                </div>
+
+                <div>
+                  <h3>
+                    Confirm your identity
+                  </h3>
+
+                  <p>
+                    Please enter your password to save
+                    your email address change.
+                  </p>
+                </div>
+              </div>
+
+              <div className="administration-field">
+                <label htmlFor="email-verification-password">
+                  Password
+                </label>
+
+                <div className="administration-input-wrapper">
+                  <LockKeyhole size={18} />
+
+                  <input
+                    id="email-verification-password"
+                    type={
+                      showEmailVerificationPassword
+                        ? "text"
+                        : "password"
+                    }
+                    value={emailVerificationPassword}
+                    onChange={(event) => {
+                      setEmailVerificationPassword(
+                        event.target.value
+                      );
+
+                      setEmailVerificationError("");
+                    }}
+                    placeholder="Enter your password"
+                    autoComplete="current-password"
+                    autoFocus
+                  />
+
+                  <button
+                    type="button"
+                    className="administration-password-toggle"
+                    onClick={() =>
+                      setShowEmailVerificationPassword(
+                        (previous) => !previous
+                      )
+                    }
+                    aria-label={
+                      showEmailVerificationPassword
+                        ? "Hide password"
+                        : "Show password"
+                    }
+                  >
+                    {showEmailVerificationPassword ? (
+                      <EyeOff size={18} />
+                    ) : (
+                      <Eye size={18} />
+                    )}
+                  </button>
+                </div>
+              </div>
+
+              {emailVerificationError && (
+                <div className="administration-error-message">
+                  <X size={17} />
+
+                  <span>
+                    {emailVerificationError}
+                  </span>
+                </div>
+              )}
+
+              <div className="administration-password-actions">
+                <button
+                  type="button"
+                  className="administration-cancel-button"
+                  onClick={closeEmailVerification}
+                >
+                  Cancel
+                </button>
+
+                <button
+                  type="submit"
+                  className="administration-primary-button"
+                >
+                  Verify & Save
+                </button>
+              </div>
+            </form>
+          </div>
+        </div>
+      )}
+
+      {/* =====================================================
+          CHANGE PASSWORD MODAL
+          ===================================================== */}
+
+      {passwordModalOpen && (
+        <div
+          className="administration-modal-backdrop"
+          role="presentation"
+          onMouseDown={(event) => {
+            if (
+              event.target === event.currentTarget
+            ) {
+              closePasswordModal();
+            }
+          }}
+        >
+          <div
+            className="administration-modal"
+            role="dialog"
+            aria-modal="true"
+            aria-labelledby="change-password-title"
+          >
+            {/* =================================================
+                MODAL HEADER
+                ================================================= */}
+
+            <div className="administration-modal-header">
+              <div>
+                <span className="administration-modal-kicker">
+                  SECURITY
+                </span>
+
+                <h2 id="change-password-title">
+                  Change Password
+                </h2>
+              </div>
+
+              <button
+                type="button"
+                className="administration-modal-close"
+                onClick={closePasswordModal}
+                aria-label="Close change password"
+              >
+                <X size={20} />
+              </button>
+            </div>
+
+            {/* =================================================
+                STEP 1 — VERIFICATION METHOD
+                ================================================= */}
+
+            {passwordStep === "method" && (
+              <div className="administration-password-step">
+                <div className="administration-security-intro">
+                  <div className="administration-security-icon">
+                    <ShieldCheck size={24} />
+                  </div>
+
+                  <div>
+                    <h3>
+                      Confirm your identity
+                    </h3>
+
+                    <p>
+                      Choose one of the following methods
+                      to verify your identity before
+                      changing your password.
+                    </p>
+                  </div>
+                </div>
+
+                <div className="administration-method-list">
+                  {/* Email OTP */}
+
+                  <button
+                    type="button"
+                    className="administration-method-option"
+                    onClick={() =>
+                      handleVerificationMethod(
+                        "otp"
+                      )
+                    }
+                  >
+                    <div className="administration-method-icon">
+                      <Mail size={20} />
+                    </div>
+
+                    <div className="administration-method-content">
+                      <strong>
+                        Verify with Email OTP
+                      </strong>
+
+                      <span>
+                        Enter the OTP sent to your
+                        registered email address.
+                      </span>
+                    </div>
+
+                    <ArrowLeft
+                      size={17}
+                      className="administration-method-arrow"
+                    />
+                  </button>
+
+                  {/* Current Password */}
+
+                  <button
+                    type="button"
+                    className="administration-method-option"
+                    onClick={() =>
+                      handleVerificationMethod(
+                        "current-password"
+                      )
+                    }
+                  >
+                    <div className="administration-method-icon">
+                      <LockKeyhole size={20} />
+                    </div>
+
+                    <div className="administration-method-content">
+                      <strong>
+                        Use Current Password
+                      </strong>
+
+                      <span>
+                        Verify your identity using your
+                        current password.
+                      </span>
+                    </div>
+
+                    <ArrowLeft
+                      size={17}
+                      className="administration-method-arrow"
+                    />
+                  </button>
+                </div>
+              </div>
+            )}
+
+            {/* =================================================
+                STEP 2 — OTP
+                ================================================= */}
+
+            {passwordStep === "otp" && (
+              <form
+                className="administration-password-step"
+                onSubmit={handleVerifyOtp}
+              >
+                <button
+                  type="button"
+                  className="administration-back-button"
+                  onClick={() =>
+                    setPasswordStep("method")
+                  }
+                >
+                  <ArrowLeft size={16} />
+
+                  <span>
+                    Back to verification methods
+                  </span>
+                </button>
+
+                <div className="administration-step-heading">
+                  <div className="administration-step-icon">
+                    <Mail size={22} />
+                  </div>
+
+                  <div>
+                    <h3>
+                      Verify with Email OTP
+                    </h3>
+
+                    <p>
+                      Enter the OTP sent to your
+                      registered email address.
+                    </p>
+                  </div>
+                </div>
+
+                <div className="administration-field">
+                  <label htmlFor="admin-otp">
+                    Enter OTP
+                  </label>
+
+                  <input
+                    id="admin-otp"
+                    type="text"
+                    inputMode="numeric"
+                    maxLength={6}
+                    value={otp}
+                    onChange={(event) => {
+                      const value =
+                        event.target.value.replace(
+                          /\D/g,
+                          ""
+                        );
+
+                      setOtp(value);
+                      setPasswordError("");
+                    }}
+                    placeholder="Enter 6-digit OTP"
+                    autoComplete="one-time-code"
+                    className="administration-otp-input"
+                    autoFocus
+                  />
+                </div>
+
+                {passwordError && (
+                  <div className="administration-error-message">
+                    <X size={17} />
+
+                    <span>{passwordError}</span>
+                  </div>
+                )}
+
+                <div className="administration-otp-actions">
+                  <button
+                    type="button"
+                    className="administration-resend-button"
+                    onClick={handleResendOtp}
+                  >
+                    <RefreshCw size={16} />
+
+                    <span>Resend OTP</span>
+                  </button>
+
+                  <button
+                    type="submit"
+                    className="administration-primary-button"
+                  >
+                    Verify OTP
+                  </button>
+                </div>
+
+                <div className="administration-demo-note">
+                  <strong>Frontend demo:</strong>{" "}
+                  OTP is generated locally for now.
+                  Check the browser console to see the
+                  demo OTP.
+                </div>
+              </form>
+            )}
+
+            {/* =================================================
+                STEP 2 — CURRENT PASSWORD
+                ================================================= */}
+
+            {passwordStep === "current-password" && (
+              <form
+                className="administration-password-step"
+                onSubmit={
+                  handleVerifyCurrentPassword
+                }
+              >
+                <button
+                  type="button"
+                  className="administration-back-button"
+                  onClick={() =>
+                    setPasswordStep("method")
+                  }
+                >
+                  <ArrowLeft size={16} />
+
+                  <span>
+                    Back to verification methods
+                  </span>
+                </button>
+
+                <div className="administration-step-heading">
+                  <div className="administration-step-icon">
+                    <LockKeyhole size={22} />
+                  </div>
+
+                  <div>
+                    <h3>
+                      Verify Current Password
+                    </h3>
+
+                    <p>
+                      Enter your current password to
+                      confirm your identity.
+                    </p>
+                  </div>
+                </div>
+
+                <div className="administration-field">
+                  <label htmlFor="current-password">
+                    Current Password
+                  </label>
+
+                  <div className="administration-input-wrapper">
+                    <LockKeyhole size={18} />
+
+                    <input
+                      id="current-password"
+                      type={
+                        showCurrentPassword
+                          ? "text"
+                          : "password"
+                      }
+                      value={currentPassword}
+                      onChange={(event) => {
+                        setCurrentPassword(
+                          event.target.value
+                        );
+
+                        setPasswordError("");
+                      }}
+                      placeholder="Enter current password"
+                      autoComplete="current-password"
+                      autoFocus
+                    />
+
+                    <button
+                      type="button"
+                      className="administration-password-toggle"
+                      onClick={() =>
+                        setShowCurrentPassword(
+                          (previous) => !previous
+                        )
+                      }
+                      aria-label={
+                        showCurrentPassword
+                          ? "Hide current password"
+                          : "Show current password"
+                      }
+                    >
+                      {showCurrentPassword ? (
+                        <EyeOff size={18} />
+                      ) : (
+                        <Eye size={18} />
+                      )}
+                    </button>
+                  </div>
+                </div>
+
+                {passwordError && (
+                  <div className="administration-error-message">
+                    <X size={17} />
+
+                    <span>{passwordError}</span>
+                  </div>
+                )}
+
+                <div className="administration-password-actions">
+                  <button
+                    type="submit"
+                    className="administration-primary-button"
+                  >
+                    Verify & Continue
+                  </button>
+                </div>
+              </form>
+            )}
+
+            {/* =================================================
+                STEP 3 — NEW PASSWORD
+                ================================================= */}
+
+            {passwordStep === "new-password" && (
+              <form
+                className="administration-password-step"
+                onSubmit={handleUpdateNewPassword}
+              >
+                <button
+                  type="button"
+                  className="administration-back-button"
+                  onClick={() => {
+                    if (
+                      verificationMethod === "otp"
+                    ) {
+                      setPasswordStep("otp");
+                    } else {
+                      setPasswordStep(
+                        "current-password"
+                      );
+                    }
+
+                    setPasswordError("");
+                  }}
+                >
+                  <ArrowLeft size={16} />
+
+                  <span>
+                    Back to verification
+                  </span>
+                </button>
+
+                <div className="administration-step-heading">
+                  <div className="administration-step-icon">
+                    <KeyRound size={22} />
+                  </div>
+
+                  <div>
+                    <h3>
+                      Create New Password
+                    </h3>
+
+                    <p>
+                      Enter and confirm your new
+                      administrator password.
+                    </p>
+                  </div>
+                </div>
+
+                {renderNewPasswordFields()}
+
+                {passwordError && (
+                  <div className="administration-error-message">
+                    <X size={17} />
+
+                    <span>{passwordError}</span>
+                  </div>
+                )}
+
+                <div className="administration-password-actions">
+                  <button
+                    type="submit"
+                    className="administration-primary-button"
+                  >
+                    Update Password
+                  </button>
+                </div>
+              </form>
+            )}
+
+            {/* =================================================
+                STEP 4 — SUCCESS
+                ================================================= */}
+
+            {passwordStep === "success" && (
+              <div className="administration-password-success">
+                <div className="administration-success-icon">
+                  <CheckCircle2 size={34} />
+                </div>
+
+                <h3>Password Updated</h3>
+
+                <p>
+                  Your administrator password has been
+                  updated successfully.
+                </p>
+
+                <button
+                  type="button"
+                  className="administration-primary-button"
+                  onClick={closePasswordModal}
+                >
+                  Done
+                </button>
+              </div>
+            )}
+          </div>
+        </div>
+      )}
+    </>
+  );
+}
+
+export default Administration;

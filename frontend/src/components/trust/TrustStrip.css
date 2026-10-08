@@ -1,0 +1,79 @@
+/* ==========================================================================
+   ACADEMIC TRUST STRIP — CLEAN CREDIBILITY BENCHMARKS
+   ========================================================================== */
+
+.academic-strip {
+  background-color: #ffffff;
+  border-bottom: 1px solid var(--color-surface-border);
+  padding: 32px 0;
+}
+
+.academic-strip__container {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 28px;
+}
+
+.academic-strip__col {
+  display: flex;
+  flex-direction: column;
+  position: relative;
+}
+
+.academic-strip__kicker {
+  font-family: var(--font-sans);
+  font-size: 0.68rem;
+  font-weight: 700;
+  letter-spacing: 0.1em;
+  color: var(--color-brand-accent);
+  text-transform: uppercase;
+  margin-bottom: 6px;
+}
+
+.academic-strip__title-wrap {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  margin-bottom: 4px;
+}
+
+.academic-strip__title {
+  color: var(--color-brand-blue-deep);
+  font-size: 1.15rem;
+  font-weight: 700;
+  letter-spacing: -0.015em;
+  line-height: 1.25;
+}
+
+.academic-strip__detail {
+  color: var(--color-text-secondary);
+  font-size: 0.82rem;
+  line-height: 1.55;
+}
+
+.academic-strip__sep {
+  position: absolute;
+  top: 10%;
+  right: -14px;
+  width: 1px;
+  height: 80%;
+  background-color: var(--color-surface-border);
+}
+
+@media (max-width: 900px) {
+  .academic-strip__container {
+    grid-template-columns: repeat(2, 1fr);
+    gap: 24px;
+  }
+
+  .academic-strip__sep {
+    display: none;
+  }
+}
+
+@media (max-width: 540px) {
+  .academic-strip__container {
+    grid-template-columns: 1fr;
+    gap: 20px;
+  }
+}

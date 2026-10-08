@@ -1,0 +1,170 @@
+@import url("https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;500;600&family=Newsreader:ital,opsz,wght@0,6..72,400..700;1,6..72,400..600&family=Plus+Jakarta+Sans:ital,wght@0,300..800;1,300..800&display=swap");
+
+:root {
+  /* Brand Core Palette — Inspired Institute (Inspired Navy + Orange + Clean White) */
+  --color-brand-navy-950: #082a5e;       /* Deep Inspired Navy for dark sections/heros/footers */
+  --color-brand-navy-900: #082a5e;       /* Primary Heading / Important Navy */
+  --color-brand-navy-850: #0c3370;       /* Refined Interactive Navy */
+  --color-brand-navy-700: #1261b5;       /* Classic Academic Blue */
+  --color-brand-royal: #1261b5;          /* Academic Blue (Replaces purplish #1d4ed8) */
+  --color-brand-blue-deep: #082a5e;      /* Primary Heading Inspired Navy (#082a5e) */
+  --color-brand-blue-dark: #082a5e;      /* Dark Brand Navy */
+  --color-brand-blue-vibrant: #1261b5;   /* Refined Interactive Blue */
+  --color-brand-blue-light: #2570c9;     /* Light Academic Blue */
+  --color-brand-blue-subtle: #eaf1fb;    /* Light Blue Surfaces verified palette */
+  --color-brand-blue-50: #eaf1fb;
+
+  /* Secondary Accent — Inspired Brand Orange */
+  --color-brand-accent: #f28c28;         /* Controlled Brand Orange */
+  --color-brand-accent-hover: #d97706;   /* Rich Amber Orange Hover */
+  --color-brand-accent-subtle: rgba(242, 140, 40, 0.1);
+
+  /* Neutrals & Surfaces (Dominant Clean White) */
+  --color-surface-pure: #ffffff;
+  --color-surface-subtle: #f8fafc;
+  --color-surface-neutral: #eaf1fb;      /* Light Blue Surfaces */
+  --color-surface-border: #e4e9f0;       /* Verified Borders / subtle UI */
+  --color-surface-border-subtle: #e4e9f0;
+  --color-surface-card: #ffffff;
+
+  /* Typography & Ink — Verified Inspired Institute Hierarchy */
+  --color-text-primary: #14213d;         /* Primary Body Text (Refined Charcoal Navy) */
+  --color-text-secondary: #667085;       /* Secondary / Supporting Text */
+  --color-text-muted: #667085;           /* Metadata / Supporting Text */
+  --color-text-heading: #082a5e;         /* Primary Heading / Important Text */
+  --color-text-inverse: #ffffff;
+  --color-text-inverse-muted: rgba(255, 255, 255, 0.75);
+
+  /* Fonts */
+  --font-sans: "Plus Jakarta Sans", -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+  --font-serif: "Newsreader", Georgia, serif;
+  --font-mono: "JetBrains Mono", monospace;
+
+  /* Easing */
+  --transition-fast: 150ms cubic-bezier(0.16, 1, 0.3, 1);
+  --transition-smooth: 250ms cubic-bezier(0.16, 1, 0.3, 1);
+  --transition-slow: 400ms cubic-bezier(0.16, 1, 0.3, 1);
+
+  /* Layout */
+  --container-max-width: 1240px;
+}
+
+* {
+  box-sizing: border-box;
+}
+
+html {
+  scroll-behavior: smooth;
+  text-size-adjust: 100%;
+}
+
+body {
+  margin: 0;
+  min-width: 320px;
+  background-color: var(--color-surface-pure);
+  color: var(--color-text-primary);
+  font-family: var(--font-sans);
+  font-size: 16px;
+  line-height: 1.65;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  text-rendering: optimizeLegibility;
+  overflow-x: hidden;
+}
+
+h1,
+h2,
+h3,
+h4,
+h5,
+h6 {
+  color: var(--color-brand-blue-deep);
+  font-family: var(--font-sans);
+  font-weight: 700;
+  line-height: 1.25;
+  letter-spacing: -0.02em;
+  margin: 0;
+  text-wrap: balance;
+}
+
+h1 {
+  font-weight: 750;
+  letter-spacing: -0.025em;
+  line-height: 1.15;
+}
+
+h2 {
+  font-weight: 700;
+  letter-spacing: -0.02em;
+  line-height: 1.22;
+}
+
+h3 {
+  font-weight: 650;
+  letter-spacing: -0.015em;
+  line-height: 1.3;
+}
+
+p {
+  margin: 0;
+  color: var(--color-text-primary);
+  line-height: 1.65;
+}
+
+a {
+  color: inherit;
+  text-decoration: none;
+  transition: color var(--transition-fast);
+}
+
+button {
+  font: inherit;
+  border: none;
+  background: none;
+  cursor: pointer;
+  padding: 0;
+  margin: 0;
+}
+
+input,
+select,
+textarea {
+  font: inherit;
+}
+
+img {
+  max-width: 100%;
+  height: auto;
+  display: block;
+}
+
+/* Tabular figures for metrics */
+.tabular-nums {
+  font-variant-numeric: tabular-nums;
+  font-feature-settings: "tnum";
+}
+
+/* Global Container */
+.site-container {
+  width: min(var(--container-max-width), calc(100% - 48px));
+  margin-left: auto;
+  margin-right: auto;
+}
+
+@media (max-width: 640px) {
+  .site-container {
+    width: calc(100% - 32px);
+  }
+}
+
+/* Selection */
+::selection {
+  background: var(--color-brand-blue-deep);
+  color: #ffffff;
+}
+
+/* Focus visible accessibility */
+:focus-visible {
+  outline: 2px solid var(--color-brand-accent);
+  outline-offset: 3px;
+}

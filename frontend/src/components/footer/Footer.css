@@ -1,0 +1,226 @@
+.academic-footer {
+  background-color: var(--color-brand-navy-950);
+  color: #ffffff;
+  border-top: 1px solid rgba(255, 255, 255, 0.08);
+  padding: 80px 0 36px;
+}
+
+.academic-footer__container {
+  display: flex;
+  flex-direction: column;
+}
+
+.academic-footer__grid {
+  display: grid;
+  grid-template-columns: 1.4fr 1.1fr 1fr 1.2fr;
+  gap: 48px;
+  padding-bottom: 64px;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.08);
+}
+
+.academic-footer__col {
+  display: flex;
+  flex-direction: column;
+}
+
+/* Brand Col */
+.academic-footer__brand {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  text-decoration: none;
+  margin-bottom: 20px;
+}
+
+.academic-footer__logo-img {
+  width: 44px;
+  height: 44px;
+  border-radius: 6px;
+  object-fit: cover;
+  border: 1px solid rgba(255, 255, 255, 0.15);
+}
+
+.academic-footer__brand-text {
+  display: flex;
+  flex-direction: column;
+}
+
+.academic-footer__brand-name {
+  color: #ffffff;
+  font-size: 1.05rem;
+  font-weight: 750;
+  letter-spacing: 0.02em;
+}
+
+.academic-footer__brand-tag {
+  color: var(--color-brand-accent);
+  font-size: 0.62rem;
+  font-weight: 700;
+  letter-spacing: 0.12em;
+  margin-top: 2px;
+}
+
+.academic-footer__about-text {
+  color: rgba(255, 255, 255, 0.72);
+  font-size: 0.86rem;
+  line-height: 1.65;
+  margin-bottom: 24px;
+  max-width: 320px;
+}
+
+.academic-footer__social-links {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+
+.academic-footer__social-links a {
+  width: 36px;
+  height: 36px;
+  border-radius: 4px;
+  background-color: rgba(255, 255, 255, 0.06);
+  border: 1px solid rgba(255, 255, 255, 0.12);
+  color: rgba(255, 255, 255, 0.8);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition:
+    background-color var(--transition-fast),
+    border-color var(--transition-fast),
+    color var(--transition-fast);
+}
+
+.academic-footer__social-links a:hover {
+  background-color: var(--color-brand-accent);
+  border-color: var(--color-brand-accent);
+  color: #ffffff;
+}
+
+/* Col Titles */
+.academic-footer__col-title {
+  color: #ffffff;
+  font-size: 0.88rem;
+  font-weight: 650;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  margin-bottom: 22px;
+  font-family: var(--font-sans);
+}
+
+.academic-footer__links {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+.academic-footer__links a {
+  color: rgba(255, 255, 255, 0.68);
+  font-size: 0.85rem;
+  text-decoration: none;
+  transition: color var(--transition-fast);
+}
+
+.academic-footer__links a:hover {
+  color: #ffffff;
+}
+
+.academic-footer__admin-link {
+  display: inline-flex !important;
+  align-items: center;
+  gap: 6px;
+  color: var(--color-brand-accent) !important;
+  font-weight: 600;
+  margin-top: 8px;
+  padding: 4px 8px;
+  border-radius: 4px;
+  background-color: rgba(242, 140, 40, 0.08);
+  border: 1px solid rgba(242, 140, 40, 0.25);
+  font-size: 0.78rem !important;
+}
+
+.academic-footer__admin-link:hover {
+  background-color: rgba(242, 140, 40, 0.16);
+  border-color: var(--color-brand-accent);
+}
+
+/* Contact Col */
+.academic-footer__contact-items {
+  display: flex;
+  flex-direction: column;
+  gap: 14px;
+}
+
+.academic-footer__contact-item {
+  display: flex;
+  align-items: flex-start;
+  gap: 10px;
+  color: rgba(255, 255, 255, 0.68);
+  font-size: 0.84rem;
+  line-height: 1.5;
+}
+
+.academic-footer__contact-icon {
+  color: var(--color-brand-accent);
+  flex-shrink: 0;
+  margin-top: 3px;
+}
+
+.academic-footer__contact-item a {
+  color: rgba(255, 255, 255, 0.85);
+  transition: color var(--transition-fast);
+}
+
+.academic-footer__contact-item a:hover {
+  color: #ffffff;
+}
+
+/* Bottom Bar */
+.academic-footer__bottom {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding-top: 28px;
+  color: rgba(255, 255, 255, 0.45);
+  font-size: 0.78rem;
+  flex-wrap: wrap;
+  gap: 16px;
+}
+
+.academic-footer__copyright {
+  margin: 0;
+}
+
+.academic-footer__legal-links {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  flex-wrap: wrap;
+}
+
+.academic-footer__legal-sep {
+  opacity: 0.4;
+}
+
+@media (max-width: 1024px) {
+  .academic-footer__grid {
+    grid-template-columns: repeat(2, 1fr);
+    gap: 40px;
+  }
+}
+
+@media (max-width: 640px) {
+  .academic-footer {
+    padding: 60px 0 32px;
+  }
+  .academic-footer__grid {
+    grid-template-columns: 1fr;
+    gap: 36px;
+  }
+  .academic-footer__bottom {
+    flex-direction: column;
+    align-items: flex-start;
+  }
+}

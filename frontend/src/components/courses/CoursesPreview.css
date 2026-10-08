@@ -1,0 +1,289 @@
+.academic-programs {
+  background-color: var(--color-surface-pure);
+  padding: 100px 0;
+  border-bottom: 1px solid var(--color-surface-border);
+}
+
+.academic-programs__header {
+  display: grid;
+  grid-template-columns: 1.15fr 0.85fr;
+  gap: 48px;
+  align-items: flex-end;
+  margin-bottom: 40px;
+}
+
+.academic-programs__headings {
+  display: flex;
+  flex-direction: column;
+}
+
+.academic-programs__eyebrow {
+  color: var(--color-brand-accent);
+  font-size: 0.72rem;
+  font-weight: 700;
+  letter-spacing: 0.16em;
+  margin-bottom: 14px;
+  font-family: var(--font-sans);
+}
+
+.academic-programs__title {
+  color: var(--color-brand-navy-950);
+  font-size: clamp(2rem, 3.4vw, 2.8rem);
+  font-weight: 750;
+  line-height: 1.2;
+  letter-spacing: -0.025em;
+}
+
+.academic-programs__intro {
+  color: var(--color-text-secondary);
+  font-size: 1.02rem;
+  line-height: 1.68;
+}
+
+/* Tabs */
+.academic-programs__tabs {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  padding-bottom: 14px;
+  margin-bottom: 32px;
+  border-bottom: 1px solid var(--color-surface-border);
+  overflow-x: auto;
+  scrollbar-width: none;
+}
+
+.academic-programs__tabs::-webkit-scrollbar {
+  display: none;
+}
+
+.academic-programs__tab {
+  font-family: var(--font-sans);
+  font-size: 0.86rem;
+  font-weight: 600;
+  color: var(--color-text-secondary);
+  padding: 8px 16px;
+  border-radius: 4px;
+  white-space: nowrap;
+  transition:
+    color var(--transition-fast),
+    background-color var(--transition-fast);
+}
+
+.academic-programs__tab:hover {
+  color: var(--color-brand-navy-950);
+  background-color: var(--color-surface-neutral);
+}
+
+.academic-programs__tab.is-active {
+  color: #ffffff;
+  background-color: var(--color-brand-navy-950);
+  font-weight: 650;
+  box-shadow: 0 2px 8px rgba(8, 42, 94, 0.18);
+}
+
+/* Catalog Row List */
+.academic-programs__list {
+  display: flex;
+  flex-direction: column;
+  border-top: 1px solid var(--color-surface-border);
+}
+
+.academic-programs__row {
+  display: grid;
+  grid-template-columns: 160px 1fr 200px;
+  align-items: center;
+  gap: 32px;
+  padding: 32px 0;
+  border-bottom: 1px solid var(--color-surface-border);
+  transition: background-color var(--transition-fast);
+}
+
+.academic-programs__row:hover {
+  background-color: rgba(248, 250, 252, 0.6);
+}
+
+.academic-programs__col-meta {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+
+.academic-programs__index {
+  color: var(--color-brand-accent);
+  font-family: var(--font-mono);
+  font-size: 0.95rem;
+  font-weight: 700;
+}
+
+.academic-programs__division {
+  color: var(--color-text-muted);
+  font-size: 0.76rem;
+  font-weight: 600;
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
+}
+
+.academic-programs__col-main {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.academic-programs__title-group {
+  display: flex;
+  align-items: baseline;
+  gap: 14px;
+  flex-wrap: wrap;
+}
+
+.academic-programs__name {
+  color: var(--color-brand-navy-950);
+  font-size: 1.25rem;
+  font-weight: 700;
+  letter-spacing: -0.02em;
+}
+
+.academic-programs__cohort {
+  color: var(--color-brand-navy-700);
+  font-size: 0.8rem;
+  font-weight: 600;
+  letter-spacing: 0.02em;
+}
+
+.academic-programs__desc {
+  color: var(--color-text-secondary);
+  font-size: 0.92rem;
+  line-height: 1.58;
+  max-width: 680px;
+}
+
+.academic-programs__tags-strip {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  margin-top: 4px;
+}
+
+.academic-programs__tag-item {
+  color: var(--color-text-muted);
+  font-size: 0.78rem;
+  font-weight: 500;
+}
+
+.academic-programs__tag-sep {
+  color: rgba(100, 116, 139, 0.5);
+  margin-left: 6px;
+}
+
+.academic-programs__col-action {
+  display: flex;
+  justify-content: flex-end;
+}
+
+.academic-programs__row-btn {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  color: var(--color-brand-navy-900);
+  font-size: 0.85rem;
+  font-weight: 600;
+  padding: 8px 14px;
+  border: 1px solid var(--color-surface-border);
+  border-radius: 4px;
+  transition:
+    color var(--transition-fast),
+    border-color var(--transition-fast),
+    background-color var(--transition-fast);
+}
+
+.academic-programs__row-btn:hover {
+  color: var(--color-brand-accent);
+  border-color: var(--color-brand-accent);
+  background-color: var(--color-brand-accent-subtle);
+}
+
+/* Skeleton */
+.academic-programs__skeleton {
+  height: 96px;
+  background-color: var(--color-surface-neutral);
+  border-bottom: 1px solid var(--color-surface-border);
+  opacity: 0.6;
+  animation: pulse 1.5s infinite ease-in-out;
+}
+
+@keyframes pulse {
+  0%, 100% { opacity: 0.4; }
+  50% { opacity: 0.8; }
+}
+
+/* Error & Empty */
+.academic-programs__error,
+.academic-programs__empty {
+  padding: 48px 0;
+  text-align: center;
+  color: var(--color-text-muted);
+}
+
+.academic-programs__retry-btn,
+.academic-programs__view-all-link {
+  display: inline-block;
+  margin-top: 12px;
+  color: var(--color-brand-accent);
+  font-weight: 600;
+  font-size: 0.9rem;
+}
+
+/* Footer */
+.academic-programs__footer {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-top: 36px;
+  padding-top: 24px;
+  border-top: 1px solid var(--color-surface-border);
+  flex-wrap: wrap;
+  gap: 20px;
+}
+
+.academic-programs__footer-note {
+  color: var(--color-text-muted);
+  font-size: 0.84rem;
+  max-width: 500px;
+}
+
+.academic-programs__full-catalog-link {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  color: var(--color-brand-navy-950);
+  font-size: 0.92rem;
+  font-weight: 700;
+  border-bottom: 1.5px solid var(--color-brand-accent);
+  padding-bottom: 2px;
+}
+
+.academic-programs__full-catalog-link:hover {
+  color: var(--color-brand-accent);
+}
+
+/* Responsive */
+@media (max-width: 900px) {
+  .academic-programs__header {
+    grid-template-columns: 1fr;
+    gap: 16px;
+  }
+  .academic-programs__row {
+    grid-template-columns: 1fr;
+    gap: 14px;
+    align-items: flex-start;
+  }
+  .academic-programs__col-action {
+    justify-content: flex-start;
+  }
+}
+
+@media (max-width: 640px) {
+  .academic-programs {
+    padding: 60px 0;
+  }
+}

@@ -1,0 +1,148 @@
+/* ==========================================================================
+   WHY INSPIRED — TEACHING METHODOLOGY STYLING
+   ========================================================================== */
+
+.academic-why {
+  background-color: var(--color-surface-subtle);
+  padding: 90px 0 100px;
+  border-bottom: 1px solid var(--color-surface-border);
+}
+
+.academic-why__container {
+  display: grid;
+  grid-template-columns: 1.05fr 0.95fr;
+  gap: 60px;
+  align-items: start;
+}
+
+.academic-why__statement-col {
+  position: relative;
+}
+
+.academic-why__sticky-box {
+  position: sticky;
+  top: 100px;
+}
+
+.academic-why__eyebrow {
+  color: var(--color-brand-accent);
+  font-size: 0.74rem;
+  font-weight: 700;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  margin-bottom: 14px;
+  display: block;
+}
+
+.academic-why__headline {
+  color: var(--color-brand-blue-deep);
+  font-size: clamp(2rem, 3.2vw, 2.7rem);
+  font-weight: 750;
+  line-height: 1.2;
+  letter-spacing: -0.025em;
+  margin-bottom: 20px;
+}
+
+.academic-why__prose {
+  color: var(--color-text-primary);
+  font-size: 0.98rem;
+  line-height: 1.7;
+  margin-bottom: 32px;
+}
+
+.academic-why__stat-card {
+  display: grid;
+  grid-template-columns: 1fr auto 1fr;
+  gap: 20px;
+  align-items: center;
+  background-color: #ffffff;
+  border: 1px solid var(--color-surface-border);
+  border-radius: 8px;
+  padding: 22px 26px;
+  box-shadow: 0 4px 16px rgba(8, 42, 94, 0.04);
+}
+
+.academic-why__stat-item {
+  display: flex;
+  flex-direction: column;
+  gap: 3px;
+}
+
+.academic-why__stat-num {
+  font-size: 1.15rem;
+  font-weight: 750;
+  color: var(--color-brand-royal);
+}
+
+.academic-why__stat-desc {
+  font-size: 0.75rem;
+  color: var(--color-text-muted);
+  line-height: 1.4;
+}
+
+.academic-why__stat-sep {
+  width: 1px;
+  height: 40px;
+  background-color: var(--color-surface-border);
+}
+
+/* Principles Column */
+.academic-why__principles-col {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+}
+
+.academic-why__item {
+  background-color: #ffffff;
+  border: 1px solid var(--color-surface-border);
+  border-radius: 8px;
+  padding: 24px 28px;
+  cursor: pointer;
+  transition: all var(--transition-fast);
+}
+
+.academic-why__item:hover,
+.academic-why__item.is-selected {
+  border-color: var(--color-brand-blue-deep);
+  box-shadow: 0 6px 20px rgba(8, 42, 94, 0.08);
+  transform: translateX(4px);
+}
+
+.academic-why__item-header {
+  display: flex;
+  align-items: center;
+  gap: 14px;
+  margin-bottom: 8px;
+}
+
+.academic-why__item-idx {
+  font-family: var(--font-mono);
+  font-size: 0.82rem;
+  font-weight: 700;
+  color: var(--color-brand-accent);
+}
+
+.academic-why__item-title {
+  color: var(--color-brand-blue-deep);
+  font-size: 1.15rem;
+  font-weight: 700;
+  letter-spacing: -0.015em;
+}
+
+.academic-why__item-summary {
+  color: var(--color-text-secondary);
+  font-size: 0.88rem;
+  line-height: 1.6;
+}
+
+@media (max-width: 900px) {
+  .academic-why__container {
+    grid-template-columns: 1fr;
+    gap: 40px;
+  }
+
+  .academic-why__sticky-box {
+    position: static;
+  }
+}

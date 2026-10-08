@@ -1,0 +1,151 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+}
+
+enum GalleryMediaType {
+  IMAGE
+  VIDEO
+}
+
+model Course {
+  id               String       @id @default(cuid())
+  title            String
+  shortDescription String?
+  fullDescription  String?
+  targetStudents   String?
+  category         String?
+  tags             String[]
+  status           CourseStatus @default(ACTIVE)
+  displayOrder     Int          @default(0)
+  createdAt        DateTime     @default(now())
+  updatedAt        DateTime     @updatedAt
+  eligibleClasses  Int[]        @default([])
+
+  @@index([status])
+  @@index([displayOrder])
+}
+
+model Faculty {
+  id            String   @id @default(cuid())
+  name          String
+  designation   String?
+  subject       String?
+  qualification String?
+  experience    String?
+  bio           String?
+  profileImage  String?
+  displayOrder  Int      @default(0)
+  isActive      Boolean  @default(true)
+  createdAt     DateTime @default(now())
+  updatedAt     DateTime @updatedAt
+
+  @@index([isActive])
+  @@index([displayOrder])
+}
+
+model Result {
+  id               String   @id @default(cuid())
+  studentName      String
+  exam             String?
+  year             Int?
+  score            String?
+  percentile       String?
+  rank             String?
+  achievementTitle String?
+  description      String?
+  studentImage     String?
+  displayOrder     Int      @default(0)
+  isActive         Boolean  @default(true)
+  createdAt        DateTime @default(now())
+  updatedAt        DateTime @updatedAt
+
+  @@index([isActive])
+  @@index([year])
+  @@index([displayOrder])
+}
+
+model Gallery {
+  id                 String           @id @default(cuid())
+  imageUrl           String
+  mediaUrl           String?
+  mediaType          GalleryMediaType @default(IMAGE)
+  cloudinaryPublicId String?
+  title              String?
+  description        String?
+  category           String?
+  displayOrder       Int              @default(0)
+  isActive           Boolean          @default(true)
+  createdAt          DateTime         @default(now())
+  updatedAt          DateTime         @updatedAt
+
+  @@index([isActive])
+  @@index([category])
+  @@index([displayOrder])
+  @@index([mediaType])
+}
+
+model Enquiry {
+  id               String        @id @default(cuid())
+  studentName      String
+  parentName       String?
+  phoneNumber      String
+  email            String?
+  studentClass     String?
+  interestedCourse String?
+  message          String?
+  status           EnquiryStatus @default(NEW)
+  createdAt        DateTime      @default(now())
+  updatedAt        DateTime      @updatedAt
+
+  @@index([status])
+  @@index([createdAt])
+  @@index([phoneNumber])
+}
+
+model Institute {
+  id                 String   @id @default(cuid())
+  name               String
+  phone              String?
+  whatsappNumber     String?
+  email              String?
+  address            String?
+  workingHours       String?
+  facebookUrl        String?
+  instagramUrl       String?
+  youtubeUrl         String?
+  linkedinUrl        String?
+  about              String?
+  heroImageUrl       String?
+  heroImagePublicId  String?
+  heroCloudinaryPublicId String?
+  createdAt          DateTime @default(now())
+  updatedAt          DateTime @updatedAt
+}
+
+model Admin {
+  id           String   @id @default(cuid())
+  name         String
+  email        String   @unique
+  passwordHash String
+  isActive     Boolean  @default(true)
+  createdAt    DateTime @default(now())
+  updatedAt    DateTime @updatedAt
+
+  @@index([isActive])
+}
+
+enum CourseStatus {
+  ACTIVE
+  INACTIVE
+}
+
+enum EnquiryStatus {
+  NEW
+  CONTACTED
+  CONVERTED
+  CLOSED
+}

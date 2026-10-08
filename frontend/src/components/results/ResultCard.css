@@ -1,0 +1,157 @@
+.result-card {
+  position: relative;
+  overflow: hidden;
+  min-height: 360px;
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-end;
+  background: #082a5e;
+  border: 1px solid #e4e9f0;
+}
+
+.result-card__image {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  transition: transform 0.55s ease;
+}
+
+.result-card:hover .result-card__image {
+  transform: scale(1.04);
+}
+
+.result-card__placeholder {
+  position: absolute;
+  inset: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background:
+    radial-gradient(
+      circle at 75% 25%,
+      rgba(242, 140, 40, 0.2),
+      transparent 28%
+    ),
+    linear-gradient(145deg, #1261b5, #082a5e);
+  color: rgba(255, 255, 255, 0.85);
+}
+
+.result-card__placeholder-icon {
+  width: 72px;
+  height: 72px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border: 1px solid rgba(255, 255, 255, 0.3);
+  color: #f28c28;
+}
+
+.result-card__overlay {
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(
+    to top,
+    rgba(8, 42, 94, 0.97) 0%,
+    rgba(8, 42, 94, 0.72) 40%,
+    rgba(8, 42, 94, 0.08) 78%,
+    transparent 100%
+  );
+}
+
+.result-card__content {
+  position: relative;
+  z-index: 2;
+  padding: 28px;
+  color: #ffffff;
+}
+
+.result-card__category {
+  display: inline-flex;
+  align-items: center;
+  gap: 7px;
+  margin-bottom: 10px;
+  color: #f28c28;
+  font-size: 0.67rem;
+  font-weight: 700;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+}
+
+.result-card__category::before {
+  content: "";
+  width: 18px;
+  height: 1px;
+  background: #f28c28;
+}
+
+.result-card__score {
+  margin: 0;
+  color: #ffffff;
+  font-size: clamp(2rem, 4vw, 3rem);
+  font-weight: 750;
+  line-height: 1;
+  letter-spacing: -0.035em;
+}
+
+.result-card__student {
+  margin: 10px 0 0;
+  color: #ffffff;
+  font-size: 1rem;
+  font-weight: 650;
+}
+
+.result-card__achievement {
+  margin: 5px 0 0;
+  color: rgba(255, 255, 255, 0.72);
+  font-size: 0.74rem;
+  line-height: 1.5;
+}
+
+.result-card__badge {
+  position: absolute;
+  top: 22px;
+  right: 22px;
+  z-index: 3;
+  padding: 7px 10px;
+  background: #ffffff;
+  color: #082a5e;
+  font-size: 0.62rem;
+  font-weight: 700;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+}
+
+@media (max-width: 700px) {
+  .result-card {
+    min-height: 330px;
+  }
+
+  .result-card__content {
+    padding: 23px;
+  }
+
+  .result-card__badge {
+    top: 16px;
+    right: 16px;
+  }
+}
+
+@media (max-width: 480px) {
+  .result-card {
+    min-height: 300px;
+  }
+
+  .result-card__content {
+    padding: 20px;
+  }
+
+  .result-card__score {
+    font-size: 2.2rem;
+  }
+
+  .result-card__student {
+    font-size: 0.92rem;
+  }
+}

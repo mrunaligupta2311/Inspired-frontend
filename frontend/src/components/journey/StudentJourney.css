@@ -1,0 +1,260 @@
+/* ==========================================================================
+   STUDENT JOURNEY — LEARNING PROGRESSION TIMELINE
+   ========================================================================== */
+
+.academic-journey {
+  background-color: var(--color-surface-pure);
+  padding: 95px 0 105px;
+  border-bottom: 1px solid var(--color-surface-border);
+}
+
+.academic-journey__header {
+  max-width: 760px;
+  margin-bottom: 50px;
+}
+
+.academic-journey__eyebrow {
+  color: var(--color-brand-accent);
+  font-size: 0.74rem;
+  font-weight: 700;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  margin-bottom: 12px;
+  display: block;
+}
+
+.academic-journey__title {
+  color: var(--color-brand-blue-deep);
+  font-size: clamp(2rem, 3.2vw, 2.7rem);
+  font-weight: 750;
+  line-height: 1.2;
+  letter-spacing: -0.025em;
+  margin-bottom: 16px;
+}
+
+.academic-journey__intro {
+  color: var(--color-text-secondary);
+  font-size: 1rem;
+  line-height: 1.68;
+}
+
+/* Timeline Track */
+.academic-journey__timeline {
+  position: relative;
+  margin-bottom: 40px;
+}
+
+.academic-journey__track {
+  position: absolute;
+  top: 18px;
+  left: 0;
+  width: 100%;
+  height: 3px;
+  background-color: var(--color-surface-border);
+  z-index: 1;
+}
+
+.academic-journey__track-fill {
+  height: 100%;
+  background: linear-gradient(90deg, var(--color-brand-royal), var(--color-brand-accent));
+  transition: width var(--transition-smooth);
+}
+
+.academic-journey__steps {
+  position: relative;
+  z-index: 2;
+  display: grid;
+  grid-template-columns: repeat(6, 1fr);
+  gap: 12px;
+}
+
+.academic-journey__step-btn {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 10px;
+  cursor: pointer;
+  background: none;
+  border: none;
+  padding: 0;
+}
+
+.academic-journey__node {
+  width: 36px;
+  height: 36px;
+  border-radius: 50%;
+  background-color: #ffffff;
+  border: 2px solid var(--color-surface-border);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 0.8rem;
+  font-weight: 700;
+  color: var(--color-text-muted);
+  transition: all var(--transition-fast);
+}
+
+.academic-journey__step-btn.is-active .academic-journey__node {
+  background-color: var(--color-brand-royal);
+  border-color: var(--color-brand-royal);
+  color: #ffffff;
+  box-shadow: 0 0 0 4px rgba(8, 42, 94, 0.12);
+}
+
+.academic-journey__step-btn.is-past .academic-journey__node {
+  background-color: var(--color-brand-blue-subtle);
+  border-color: var(--color-brand-royal);
+  color: var(--color-brand-royal);
+}
+
+.academic-journey__step-label {
+  font-size: 0.68rem;
+  font-weight: 700;
+  letter-spacing: 0.05em;
+  text-transform: uppercase;
+  color: var(--color-text-muted);
+  text-align: center;
+}
+
+.academic-journey__step-btn.is-active .academic-journey__step-label {
+  color: var(--color-brand-royal);
+}
+
+/* Active Card */
+.academic-journey__card {
+  display: grid;
+  grid-template-columns: 280px 1fr;
+  background-color: var(--color-surface-subtle);
+  border: 1px solid var(--color-surface-border);
+  border-radius: 10px;
+  overflow: hidden;
+  box-shadow: 0 8px 30px rgba(15, 39, 102, 0.04);
+}
+
+.academic-journey__card-side {
+  background-color: #ffffff;
+  border-right: 1px solid var(--color-surface-border);
+  padding: 32px 28px;
+  display: flex;
+  flex-direction: column;
+}
+
+.academic-journey__card-idx {
+  font-family: var(--font-mono);
+  font-size: 0.76rem;
+  font-weight: 700;
+  color: var(--color-brand-accent);
+  margin-bottom: 4px;
+}
+
+.academic-journey__card-phase {
+  font-size: 0.82rem;
+  font-weight: 700;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  color: var(--color-brand-blue-deep);
+  margin-bottom: 24px;
+}
+
+.academic-journey__card-milestone {
+  margin-top: auto;
+  padding-top: 16px;
+  border-top: 1px solid var(--color-surface-border);
+}
+
+.academic-journey__card-milestone small {
+  font-size: 0.65rem;
+  font-weight: 700;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: var(--color-brand-accent);
+  display: block;
+  margin-bottom: 4px;
+}
+
+.academic-journey__card-milestone p {
+  font-size: 0.84rem;
+  color: var(--color-text-secondary);
+  line-height: 1.45;
+}
+
+/* Main */
+.academic-journey__card-main {
+  padding: 36px 40px;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+}
+
+.academic-journey__card-title {
+  color: var(--color-brand-blue-deep);
+  font-size: 1.45rem;
+  font-weight: 700;
+  margin-bottom: 12px;
+}
+
+.academic-journey__card-desc {
+  color: var(--color-text-primary);
+  font-size: 0.96rem;
+  line-height: 1.68;
+  margin-bottom: 28px;
+}
+
+.academic-journey__controls {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+
+.academic-journey__nav-btn {
+  padding: 8px 16px;
+  border-radius: 6px;
+  font-size: 0.84rem;
+  font-weight: 600;
+  color: var(--color-brand-blue-deep);
+  background-color: #ffffff;
+  border: 1px solid var(--color-surface-border);
+  transition: all var(--transition-fast);
+}
+
+.academic-journey__nav-btn:hover:not(:disabled) {
+  border-color: var(--color-brand-blue-deep);
+  color: var(--color-brand-blue-deep);
+}
+
+.academic-journey__nav-btn--primary {
+  background-color: var(--color-brand-blue-deep);
+  color: #ffffff;
+  border-color: var(--color-brand-blue-deep);
+}
+
+.academic-journey__nav-btn--primary:hover:not(:disabled) {
+  background-color: #062047;
+  color: #ffffff;
+  border-color: #062047;
+}
+
+.academic-journey__nav-btn:disabled {
+  opacity: 0.4;
+  cursor: not-allowed;
+}
+
+@media (max-width: 850px) {
+  .academic-journey__card {
+    grid-template-columns: 1fr;
+  }
+
+  .academic-journey__card-side {
+    border-right: none;
+    border-bottom: 1px solid var(--color-surface-border);
+  }
+
+  .academic-journey__steps {
+    grid-template-columns: repeat(3, 1fr);
+    row-gap: 20px;
+  }
+
+  .academic-journey__track {
+    display: none;
+  }
+}

@@ -1,0 +1,8 @@
+{
+  "name": "Inspired Institute",
+  "description": "Concept-based learning, academic excellence, and competitive exam preparation for Classes 6–12, JEE, NEET, GUJCET, and Olympiads in Vadodara.",
+  "permissions": [],
+  "capabilities": [
+    "MAJOR_CAPABILITY_SERVER_SIDE_GEMINI_API"
+  ]
+}

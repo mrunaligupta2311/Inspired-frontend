@@ -1,0 +1,39 @@
+{
+  "name": "inspired-institute",
+  "version": "1.0.0",
+  "private": true,
+  "workspaces": [
+    "frontend",
+    "admin-panel",
+    "backend"
+  ],
+  "scripts": {
+    "dev": "node server.js",
+    "build": "npm run build --workspace=frontend && npm run build --workspace=admin-panel",
+    "build:frontend": "npm run build --workspace=frontend",
+    "build:admin": "npm run build --workspace=admin-panel",
+    "prisma:generate": "prisma generate --schema=backend/prisma/schema.prisma",
+    "prisma:push": "prisma db push --schema=backend/prisma/schema.prisma",
+    "prisma:migrate": "prisma migrate deploy --schema=backend/prisma/schema.prisma",
+    "prisma:seed": "node backend/prisma/seed/seed.js",
+    "lint": "npm run lint --workspace=frontend",
+    "start": "node server.js"
+  },
+  "dependencies": {
+    "@prisma/adapter-pg": "^7.10.0",
+    "@prisma/client": "^7.10.0",
+    "bcryptjs": "^3.0.3",
+    "cloudinary": "^2.11.0",
+    "cookie-parser": "^1.4.7",
+    "cors": "^2.8.6",
+    "dotenv": "^17.4.2",
+    "express": "^5.2.1",
+    "jsonwebtoken": "^9.0.3",
+    "multer": "^2.4.0",
+    "pg": "^8.23.0"
+  },
+  "devDependencies": {
+    "prisma": "^7.10.0",
+    "vite": "^8.2.2"
+  }
+}

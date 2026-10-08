@@ -1,0 +1,270 @@
+/* ==========================================================================
+   RESULTS PAGE — AUTHENTIC STUDENT ACHIEVEMENTS STYLING (ROYAL BLUE + WHITE)
+   ========================================================================== */
+
+.results-showcase-page {
+  display: flex;
+  flex-direction: column;
+  width: 100%;
+  background-color: var(--color-surface-pure);
+}
+
+/* 1. Hero */
+.results-hero {
+  background: linear-gradient(180deg, #ffffff 0%, var(--color-brand-blue-subtle) 100%);
+  color: var(--color-text-primary);
+  padding: 70px 0 75px;
+  border-bottom: 1px solid var(--color-surface-border);
+}
+
+.results-hero__container {
+  max-width: 920px;
+}
+
+.results-hero__eyebrow {
+  color: var(--color-brand-accent);
+  font-size: 0.74rem;
+  font-weight: 750;
+  letter-spacing: 0.12em;
+  margin-bottom: 14px;
+  display: block;
+}
+
+.results-hero__title {
+  color: var(--color-brand-blue-deep);
+  font-family: var(--font-sans);
+  font-size: clamp(2.2rem, 3.8vw, 3.2rem);
+  font-weight: 750;
+  line-height: 1.18;
+  letter-spacing: -0.025em;
+  margin-bottom: 18px;
+}
+
+.results-hero__lead {
+  color: var(--color-text-secondary);
+  font-size: 1.05rem;
+  line-height: 1.68;
+  margin-bottom: 24px;
+}
+
+.results-hero__trust-bar {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  flex-wrap: wrap;
+  font-size: 0.84rem;
+  color: var(--color-brand-royal);
+  font-weight: 650;
+  padding-top: 18px;
+  border-top: 1px solid var(--color-surface-border);
+}
+
+.results-hero__sep {
+  color: var(--color-text-muted);
+}
+
+/* 2. Filters Bar */
+.results-filters-section {
+  background-color: #ffffff;
+  border-bottom: 1px solid var(--color-surface-border);
+  padding: 20px 0;
+  position: sticky;
+  top: 74px;
+  z-index: 20;
+  backdrop-filter: blur(12px);
+  -webkit-backdrop-filter: blur(12px);
+}
+
+.results-filters-bar {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 16px;
+  flex-wrap: wrap;
+}
+
+.results-filters-tabs {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  background-color: var(--color-surface-subtle);
+  padding: 4px;
+  border-radius: 8px;
+  border: 1px solid var(--color-surface-border);
+  overflow-x: auto;
+  max-width: 100%;
+}
+
+.results-exam-tab {
+  padding: 7px 16px;
+  font-size: 0.82rem;
+  font-weight: 650;
+  color: var(--color-text-secondary);
+  border-radius: 6px;
+  transition: all var(--transition-fast);
+  white-space: nowrap;
+}
+
+.results-exam-tab:hover {
+  color: var(--color-brand-blue-deep);
+}
+
+.results-exam-tab.is-active {
+  background-color: var(--color-brand-blue-deep);
+  color: #ffffff;
+  box-shadow: 0 2px 8px rgba(8, 42, 94, 0.18);
+}
+
+.results-count-indicator {
+  font-size: 0.82rem;
+  color: var(--color-text-muted);
+}
+
+.results-count-indicator strong {
+  color: var(--color-brand-blue-deep);
+}
+
+/* 3. Results Cards Showcase Grid */
+.results-grid-section {
+  padding: 70px 0 90px;
+  background-color: var(--color-surface-pure);
+}
+
+.results-cards-grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 28px;
+}
+
+.results-achievement-card {
+  background-color: #ffffff;
+  border: 1px solid var(--color-surface-border);
+  border-radius: 8px;
+  padding: 30px 28px;
+  display: flex;
+  flex-direction: column;
+  transition: all var(--transition-smooth);
+}
+
+.results-achievement-card:hover {
+  border-color: var(--color-brand-royal);
+  box-shadow: 0 10px 30px rgba(29, 78, 216, 0.08);
+  transform: translateY(-2px);
+}
+
+.results-achievement-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 16px;
+  gap: 10px;
+}
+
+.results-exam-name {
+  font-size: 0.76rem;
+  font-weight: 750;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  color: var(--color-brand-royal);
+}
+
+.results-rank-pill {
+  font-size: 0.76rem;
+  font-weight: 700;
+  color: var(--color-brand-accent);
+  background-color: var(--color-brand-accent-subtle);
+  padding: 2px 8px;
+  border-radius: 4px;
+}
+
+.results-score-block {
+  margin-bottom: 18px;
+}
+
+.results-score-value {
+  color: var(--color-brand-blue-deep);
+  font-size: 2.2rem;
+  font-weight: 850;
+  letter-spacing: -0.04em;
+  line-height: 1.1;
+}
+
+.results-student-block {
+  flex: 1 0 auto;
+  margin-bottom: 20px;
+}
+
+.results-student-name {
+  color: var(--color-brand-blue-deep);
+  font-size: 1.25rem;
+  font-weight: 750;
+  letter-spacing: -0.02em;
+  margin-bottom: 4px;
+}
+
+.results-achievement-title {
+  color: var(--color-text-secondary);
+  font-size: 0.88rem;
+  font-weight: 600;
+  line-height: 1.45;
+  margin-bottom: 8px;
+}
+
+.results-achievement-desc {
+  color: var(--color-text-muted);
+  font-size: 0.84rem;
+  line-height: 1.55;
+}
+
+.results-achievement-footer {
+  padding-top: 14px;
+  border-top: 1px solid var(--color-surface-border);
+}
+
+.results-institution-stamp {
+  font-size: 0.72rem;
+  color: var(--color-text-muted);
+  font-weight: 600;
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
+}
+
+/* Skeletons & State */
+.results-skeleton-card {
+  height: 240px;
+  background: linear-gradient(90deg, #f1f5f9 25%, #e2e8f0 50%, #f1f5f9 75%);
+  background-size: 200% 100%;
+  animation: pulse 1.6s infinite;
+  border-radius: 8px;
+}
+
+.results-state-box {
+  padding: 60px 20px;
+  text-align: center;
+  background-color: var(--color-surface-subtle);
+  border: 1px dashed var(--color-surface-border);
+  border-radius: 8px;
+}
+
+.results-retry-btn {
+  display: inline-flex;
+  padding: 9px 20px;
+  background-color: var(--color-brand-royal);
+  color: #ffffff;
+  font-size: 0.86rem;
+  font-weight: 650;
+  border-radius: 6px;
+  margin-top: 14px;
+}
+
+@media (max-width: 992px) {
+  .results-cards-grid {
+    grid-template-columns: repeat(2, 1fr);
+  }
+}
+
+@media (max-width: 640px) {
+  .results-cards-grid {
+    grid-template-columns: 1fr;
+  }
+}
